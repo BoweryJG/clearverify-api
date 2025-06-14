@@ -1,4 +1,4 @@
-import { InsuranceConnector } from '../integrations/insurance.connector';
+import { EligibleConnector } from '../integrations/eligible.connector';
 import { CryptoService } from './crypto.service';
 import { CacheService } from './cache.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -46,12 +46,12 @@ interface VerificationResult {
 }
 
 export class VerificationService {
-  private insuranceConnector: InsuranceConnector;
+  private eligibleConnector: EligibleConnector;
   private cryptoService: CryptoService;
   private cacheService: CacheService;
 
   constructor() {
-    this.insuranceConnector = new InsuranceConnector();
+    this.eligibleConnector = new EligibleConnector();
     this.cryptoService = new CryptoService();
     this.cacheService = new CacheService();
   }
@@ -71,8 +71,8 @@ export class VerificationService {
     }
 
     try {
-      // Connect to insurance provider API
-      const insurerResponse = await this.insuranceConnector.verifyEligibility({
+      // Connect to Eligible.com API
+      const insurerResponse = await this.eligibleConnector.verifyEligibility({
         payerId: request.insuranceInfo.payerId,
         memberId: request.patientInfo.memberId || '',
         procedureCode: request.procedureCode,
@@ -83,8 +83,12 @@ export class VerificationService {
         },
       });
 
-      // Process and calculate costs
-      const coverage = this.calculateCoverage(insurerResponse, request.procedureCode);
+      // Process response from Eligible.com
+      if (!insurerResponse.success) {
+        throw new Error('Verification failed');
+      }
+      
+      const coverage = this.calculateCoverageFromEligible(insurerResponse.data, request.procedureCode);
       
       // Create result
       const result: VerificationResult = {
@@ -92,9 +96,9 @@ export class VerificationService {
         status: 'completed',
         coverage,
         eligibility: {
-          isActive: insurerResponse.eligibility.active,
-          effectiveDate: insurerResponse.eligibility.effectiveDate,
-          terminationDate: insurerResponse.eligibility.terminationDate,
+          isActive: insurerResponse.data.eligibility.active,
+          effectiveDate: insurerResponse.data.eligibility.effectiveDate,
+          terminationDate: insurerResponse.data.eligibility.terminationDate,
         },
         signedBy: await this.cryptoService.signData({
           verificationId,
@@ -130,9 +134,9 @@ export class VerificationService {
     }
   }
 
-  private calculateCoverage(insurerData: any, procedureCode: string): VerificationResult['coverage'] {
-    // Extract coverage details from insurer response
-    const procedureCoverage = insurerData.benefits.find(
+  private calculateCoverageFromEligible(eligibleData: any, procedureCode: string): VerificationResult['coverage'] {
+    // Extract coverage details from Eligible.com response
+    const procedureCoverage = eligibleData.benefits.find(
       (b: any) => b.procedureCode === procedureCode
     );
 
@@ -141,12 +145,12 @@ export class VerificationService {
         isProcedureCovered: false,
         coveragePercentage: 0,
         deductible: {
-          annual: insurerData.deductible.annual || 0,
-          remaining: insurerData.deductible.remaining || 0,
+          annual: eligibleData.deductible.annual || 0,
+          remaining: eligibleData.deductible.remaining || 0,
         },
         outOfPocketMax: {
-          annual: insurerData.outOfPocketMax.annual || 0,
-          remaining: insurerData.outOfPocketMax.remaining || 0,
+          annual: eligibleData.outOfPocketMax.annual || 0,
+          remaining: eligibleData.outOfPocketMax.remaining || 0,
         },
         copay: 0,
         estimatedPatientCost: 0,
@@ -156,7 +160,7 @@ export class VerificationService {
     // Calculate patient responsibility
     const procedureCost = procedureCoverage.averageCost || 0;
     const coveragePercent = procedureCoverage.coveragePercentage || 80;
-    const deductibleRemaining = insurerData.deductible.remaining || 0;
+    const deductibleRemaining = eligibleData.deductible.remaining || 0;
     
     let patientCost = 0;
     
@@ -176,19 +180,19 @@ export class VerificationService {
     patientCost += copay;
     
     // Cap at out-of-pocket maximum
-    const oopRemaining = insurerData.outOfPocketMax.remaining || Infinity;
+    const oopRemaining = eligibleData.outOfPocketMax.remaining || Infinity;
     patientCost = Math.min(patientCost, oopRemaining);
 
     return {
       isProcedureCovered: true,
       coveragePercentage: coveragePercent,
       deductible: {
-        annual: insurerData.deductible.annual || 0,
-        remaining: insurerData.deductible.remaining || 0,
+        annual: eligibleData.deductible.annual || 0,
+        remaining: eligibleData.deductible.remaining || 0,
       },
       outOfPocketMax: {
-        annual: insurerData.outOfPocketMax.annual || 0,
-        remaining: insurerData.outOfPocketMax.remaining || 0,
+        annual: eligibleData.outOfPocketMax.annual || 0,
+        remaining: eligibleData.outOfPocketMax.remaining || 0,
       },
       copay,
       estimatedPatientCost: Math.round(patientCost * 100) / 100,
