@@ -1,0 +1,15 @@
+{
+  "patientInfo": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "1980-01-01",
+    "memberId": "123456789"
+  },
+  "insuranceInfo": {
+    "payerId": "bcbs",
+    "planId": "PPO123",
+    "groupNumber": "GRP456"
+  },
+  "procedureCode": "D6010",
+  "providerId": "DR-001"
+}

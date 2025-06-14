@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearVerify Widget Integration Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f9fafb;
+    }
+    
+    h1 {
+      color: #111827;
+      margin-bottom: 16px;
+    }
+    
+    p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    
+    .demo-section {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 24px;
+    }
+    
+    .code-block {
+      background: #1f2937;
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .procedure-example {
+      background: #f3f4f6;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ClearVerify Widget Integration</h1>
+  <p>This example demonstrates how to integrate the ClearVerify insurance verification widget into your dental practice website.</p>
+  
+  <div class="demo-section">
+    <h2>Live Demo</h2>
+    <p>Click the "Check Insurance Coverage" button in the bottom-right corner to try the widget.</p>
+    
+    <div class="procedure-example">
+      <h3>Example Procedures:</h3>
+      <ul>
+        <li>D6010 - Surgical placement of implant body</li>
+        <li>D6065 - Implant supported porcelain/ceramic crown</li>
+        <li>D0120 - Periodic oral evaluation</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="demo-section">
+    <h2>Integration Code</h2>
+    <p>Add this code to your website to enable insurance verification:</p>
+    
+    <div class="code-block">
+&lt;!-- Add before closing &lt;/body&gt; tag --&gt;
+&lt;script src="https://api.clearverify.com/widget/v1/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  ClearVerify.init({
+    apiKey: 'your-api-key-here',
+    providerId: 'your-provider-id',
+    procedureCodes: [
+      { code: 'D6010', description: 'Surgical placement of implant body' },
+      { code: 'D6065', description: 'Implant supported crown' },
+      { code: 'D0120', description: 'Periodic oral evaluation' }
+    ],
+    onSuccess: function(result) {
+      console.log('Verification successful:', result);
+      // Handle successful verification
+    },
+    onError: function(error) {
+      console.error('Verification failed:', error);
+      // Handle errors
+    }
+  });
+&lt;/script&gt;
+    </div>
+  </div>
+  
+  <div class="demo-section">
+    <h2>Customization Options</h2>
+    <div class="code-block">
+ClearVerify.init({
+  // Required
+  apiKey: 'your-api-key',
+  providerId: 'your-provider-id',
+  
+  // Optional
+  theme: 'light', // or 'dark'
+  position: 'bottom-right', // or 'bottom-left', 'top-right', 'top-left'
+  
+  // Procedure codes specific to your practice
+  procedureCodes: [
+    { code: 'D6010', description: 'Implant placement' },
+    // Add more procedures
+  ],
+  
+  // Callbacks
+  onSuccess: function(result) {
+    // result contains coverage details
+  },
+  onError: function(error) {
+    // Handle errors
+  }
+});
+    </div>
+  </div>
+
+  <!-- ClearVerify Widget Integration -->
+  <script src="../src/widgets/embed.js"></script>
+  <script>
+    // Initialize the widget
+    ClearVerify.init({
+      apiKey: 'demo-api-key',
+      providerId: 'demo-provider',
+      procedureCodes: [
+        { code: 'D6010', description: 'Surgical placement of implant body - $3,500' },
+        { code: 'D6065', description: 'Implant supported porcelain/ceramic crown - $2,200' },
+        { code: 'D0120', description: 'Periodic oral evaluation - $95' },
+        { code: 'D0210', description: 'Complete series of radiographic images - $150' },
+        { code: 'D2391', description: 'Resin-based composite - one surface - $225' }
+      ],
+      onSuccess: function(result) {
+        console.log('✅ Verification successful:', result);
+        // In production, you might:
+        // - Update the patient's record
+        // - Show financing options
+        // - Schedule the procedure
+      },
+      onError: function(error) {
+        console.error('❌ Verification failed:', error);
+      }
+    });
+  </script>
+</body>
+</html>

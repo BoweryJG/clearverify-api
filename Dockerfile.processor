@@ -1,0 +1,43 @@
+# Ephemeral processor container for insurance verification
+FROM node:20-alpine
+
+# Install required tools
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    dumb-init
+
+# Create app directory
+WORKDIR /processor
+
+# Create non-root user
+RUN addgroup -g 1001 -S processor && adduser -S processor -u 1001
+
+# Copy processor scripts
+COPY workers ./workers
+
+# Set Chrome executable path for Puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Install dependencies
+RUN npm init -y && \
+    npm install puppeteer axios
+
+# Security: No persistent storage
+VOLUME ["/tmp"]
+ENV TMPDIR=/tmp
+
+# Switch to non-root user
+USER processor
+
+# Container will self-destruct after timeout
+ENV CONTAINER_TIMEOUT_MS=30000
+
+# No data persistence - all processing is ephemeral
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "workers/processor.js"]

@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - JWT_SECRET=dev-secret-change-in-production
+      - ENCRYPTION_KEY=devsecretkey123456789012345678901234567890123456789012345678901234
+      - ENABLE_AUDIT_LOGGING=true
+      - ENABLE_ENCRYPTION=true
+    volumes:
+      - ./src:/app/src
+      - ./dist:/app/dist
+    networks:
+      - clearverify-network
+    depends_on:
+      - redis
+    command: npm run dev
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - clearverify-network
+    command: redis-server --appendonly yes
+
+  processor:
+    build:
+      context: .
+      dockerfile: Dockerfile.processor
+    networks:
+      - clearverify-network
+    environment:
+      - CONTAINER_TIMEOUT_MS=30000
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    tmpfs:
+      - /tmp
+
+networks:
+  clearverify-network:
+    driver: bridge
+
+volumes:
+  redis-data:
