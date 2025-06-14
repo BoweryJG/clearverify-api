@@ -1,0 +1,60 @@
+services:
+  # ClearVerify API Service
+  - type: web
+    name: clearverify-api
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: ENABLE_AUDIT_LOGGING
+        value: true
+      - key: ENABLE_ENCRYPTION
+        value: true
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      # Insurance API placeholders - update in Render dashboard
+      - key: USE_CLEARINGHOUSE
+        value: false
+      - key: CLEARINGHOUSE_PROVIDER
+        value: change_healthcare
+      - key: BCBS_FLORIDA_CLIENT_ID
+        sync: false
+      - key: BCBS_FLORIDA_CLIENT_SECRET
+        sync: false
+      - key: CIGNA_CLIENT_ID
+        sync: false
+      - key: CIGNA_CLIENT_SECRET
+        sync: false
+      - key: UNITED_OPTUM_CLIENT_ID
+        sync: false
+      - key: UNITED_OPTUM_CLIENT_SECRET
+        sync: false
+      - key: AETNA_CLIENT_ID
+        sync: false
+      - key: AETNA_CLIENT_SECRET
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Redis for caching
+  - type: redis
+    name: clearverify-redis
+    plan: starter
+    maxmemoryPolicy: allkeys-lru
+
+# Optional: PostgreSQL for future expansion
+#  - type: pserv
+#    name: clearverify-db
+#    plan: starter
+#    databaseName: clearverify
+#    user: clearverify
