@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearVerify Widget Demo - Dental Practice</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8fafc;
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .demo-header h1 {
+            margin: 0 0 12px 0;
+            font-size: 36px;
+        }
+        
+        .demo-header p {
+            margin: 0;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .demo-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .demo-section h2 {
+            margin: 0 0 20px 0;
+            color: #1e293b;
+        }
+        
+        .integration-code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .feature-card h3 {
+            margin: 0 0 12px 0;
+            color: #1e293b;
+        }
+        
+        .feature-card p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        .live-demo {
+            background: #f0f9ff;
+            border: 2px dashed #2563eb;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .live-demo h3 {
+            margin: 0 0 16px 0;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <header class="demo-header">
+        <h1>🏥 ClearVerify Insurance Widget</h1>
+        <p>Reduce verification burden on your dental practice</p>
+    </header>
+
+    <div class="demo-content">
+        <section class="demo-section">
+            <h2>🚀 Quick Integration</h2>
+            <p>Add this widget to your dental practice website in just 3 steps:</p>
+            
+            <div class="integration-code">
+&lt;!-- Step 1: Add the container --&gt;
+&lt;div id="clearverify-widget"&gt;&lt;/div&gt;
+
+&lt;!-- Step 2: Include the script --&gt;
+&lt;script src="https://clearverify-api.onrender.com/widget/clearverify-widget.js"&gt;&lt;/script&gt;
+
+&lt;!-- Step 3: Optional customization --&gt;
+&lt;script&gt;
+// Auto-initializes with default settings
+// Or customize:
+const widget = new ClearVerifyWidget({
+    containerId: 'clearverify-widget',
+    theme: 'modern', // or 'dark'
+    practiceId: 'your-practice-id',
+    onComplete: (result) => {
+        console.log('Verification complete:', result);
+        // Track conversions, show booking, etc.
+    }
+});
+&lt;/script&gt;
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>✨ Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔒 HIPAA Compliant</h3>
+                    <p>Zero-knowledge architecture. Patient data is encrypted and never stored.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🏥 Real Insurance APIs</h3>
+                    <p>Direct connections to BCBS, Cigna, UnitedHealth, Aetna, and more.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>⚡ Instant Verification</h3>
+                    <p>Real-time eligibility checks in seconds, not days.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>💰 Cost Transparency</h3>
+                    <p>Shows patients their exact coverage and out-of-pocket costs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📱 Mobile Optimized</h3>
+                    <p>Responsive design works perfectly on all devices.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎨 Customizable</h3>
+                    <p>Match your website's theme with custom styling options.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="live-demo">
+                <h3>👇 Live Demo</h3>
+                <p>Try the widget below with sample data</p>
+            </div>
+            
+            <!-- ClearVerify Widget Container -->
+            <div id="clearverify-widget"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>🎯 Benefits for Your Practice</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>⏰ Save Time</h3>
+                    <p>Eliminate manual insurance verification calls. Staff can focus on patient care.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>💼 Reduce No-Shows</h3>
+                    <p>Patients know their costs upfront, leading to better appointment attendance.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>💳 Faster Payments</h3>
+                    <p>Clear cost expectations improve patient payment rates.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📈 Better Experience</h3>
+                    <p>Modern, self-service verification improves patient satisfaction.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>💡 Implementation Tips</h2>
+            
+            <h3>Best Placement Locations:</h3>
+            <ul>
+                <li><strong>Appointment Booking Page</strong> - Before patients schedule</li>
+                <li><strong>Patient Portal</strong> - Self-service verification</li>
+                <li><strong>Treatment Planning</strong> - During consultation process</li>
+                <li><strong>Homepage</strong> - Prominent call-to-action</li>
+            </ul>
+            
+            <h3>Customization Options:</h3>
+            <div class="integration-code">
+const widget = new ClearVerifyWidget({
+    containerId: 'clearverify-widget',
+    theme: 'dark',                    // 'modern' or 'dark'
+    apiUrl: 'your-custom-api',        // Optional custom endpoint
+    practiceId: 'practice-123',       // Track by practice
+    onComplete: (result) => {
+        if (result.success) {
+            // Show booking calendar
+            // Track conversion
+            // Update patient record
+        }
+    }
+});
+            </div>
+        </section>
+    </div>
+
+    <!-- Include the ClearVerify Widget -->
+    <script src="clearverify-widget.js"></script>
+    
+    <script>
+        // Initialize with demo settings
+        window.clearverifyWidget = new ClearVerifyWidget({
+            practiceId: 'demo-practice',
+            onComplete: (result) => {
+                console.log('Demo verification complete:', result);
+                
+                if (result.success) {
+                    alert('✅ Verification successful! In a real implementation, you could now show booking options or update patient records.');
+                } else {
+                    console.error('Verification failed:', result.error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
